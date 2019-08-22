@@ -1,0 +1,7 @@
+Flask==1.0.2
+google-api-python-client
+apache-beam[gcp]
+google-auth
+google-cloud
+setuptools
+gunicorn
