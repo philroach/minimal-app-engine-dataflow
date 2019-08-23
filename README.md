@@ -32,8 +32,72 @@ rules out Google Cloud Functions
 * Pipeline code must exist as a package (i.e. in it's own directory with an __init__.py)
 
 * A requirements.txt file are required for BOTH app deploy AND the pipeline! This creates dependencies on for
- example gunicorn within the pipeline!
+ example gunicorn within the pipeline! 
  
- TODO: how to run it all
+Example errors in GCP Dataflow:
+```
+ModuleNotFoundError: No module named 'main'
+ModuleNotFoundError: No module named 'gunicorn'
+```
+ 
+## How to run
+ 
+There are 4 runtime scenarios of interest:
+ 
+1. Run via a local web server using DirectRunner
+ 
+2. Run via a local web server using DataflowRunner
 
+3. Run from App Engine Flex using DataflowRunner 
 
+## Setup
+
+1. Follow basic quick-start steps: https://cloud.google.com/dataflow/docs/quickstarts/quickstart-python but think 
+Python 3.7 so use venv (https://docs.python.org/3/library/venv.html) rather than virtualenv.
+
+2. git clone https://github.com/philroach/minimal-app-engine-dataflow.git
+
+3. pip install -r requirements.txt
+
+4. Edit main.py and substitute your own details for project and temp_location:
+
+```python
+def runtime_options(is_cloud):
+    return {
+        'is_cloud': is_cloud,
+        'project': 'your_google_cloud_project',
+        'temp_location': 'your_cloud_storage_folder'  # example: gs://your_bucket/dataflow/temp
+    }
+```
+5. gunicorn --workers=1 main:app
+
+## Run Local
+
+Point a browser at:
+
+http://127.0.0.1:8000/local
+
+This will execute a local Dataflow pipeline with DirectRunner. The only browser output is "local". You will see
+the output of the pipeline in the gunicorn debug at the command prompt.
+
+To send a Dataflow job to GCP:
+
+http://127.0.0.1:8000/cloud
+
+You will need to track progress of the job in GCP. 
+
+## Run on App Engine
+
+1. Edit app.yaml to match your project - note the example points to a service rather than default. If you have not 
+got a default service, delete this line.
+
+2. gcloud app deploy
+
+3. Point your browser at https://yourservice-dot-yourproject.appspot.com/cloud
+For example, if use default 'dataflow' as service name in app.yaml and your project id is phil:
+
+`https://default-dot-phil.appspot.com/cloud`
+
+This should create and send the dataflow job to GCP.
+
+Now you can go ahead and build that pipeline! 
