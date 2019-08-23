@@ -29,16 +29,16 @@ focus on the scaffolding surrounding it.
 Here's a non-exhaustive list of gotchas:
 
 * A Dataflow pipeline cannot be bundled with code that handles a web-server request in a single lump of code. This
-rules out Google Cloud Functions
+  rules out Google Cloud Functions
 
 * Because of the above, a Dataflow pipeline must include a setup.py
 
-* Because of the above, App Engine Standard cannot be used since (setup.py requires local write permissions)
+* Because of the above, App Engine Standard cannot be used (since setup.py requires local write permissions)
 
-* Pipeline code must exist as a package (i.e. in it's own directory with an __init__.py)
+* Pipeline code must exist as a package (i.e. in it's own directory with an `__init__.py`)
 
-* A requirements.txt file are required for BOTH app deploy AND the pipeline! This creates dependencies on for
- example gunicorn within the pipeline! 
+* A requirements.txt file is required for BOTH app deploy AND the pipeline! This creates dependencies on for
+  example gunicorn within the pipeline!
 
 Example errors in GCP Dataflow:
 ```
