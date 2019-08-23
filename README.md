@@ -10,15 +10,21 @@ Some notes chiefly for myself for future reference.
 
 ## Background
 
-Goal: create some kind of cloud service that can kick-off Dataflow jobs. Parameters will need to be sent to
-the service (so Dataflow Templates are out). Secondary - use Python 3.7 rather than 2.7 (there are examples 
-to found of the former).
+Goals:
+
+* Create some kind of cloud service that can kick-off Dataflow jobs. Parameters will need to be sent to
+the service (so Dataflow Templates are out). 
+
+* Use Python 3.7 rather than 2.7 (there are examples to be found of the former).
 
 Creating pipelines is relatively easy as is running locally as DirectRunner as is running
-locally using DataflowRunner. So the pipeline in this example will be as basic as possible.
+locally using DataflowRunner. 
 
-Problems begin when a web service kicks of a Dataflow job, either locally or deploying the pipeline generator 
+Problems begin when a web service has to kick off a Dataflow job, either locally or deploying the pipeline generator 
 somewhere within GCP.
+
+The pipeline in this example will be as basic as possible so we can
+focus on the scaffolding surrounding it.
 
 Here's a non-exhaustive list of gotchas:
 
@@ -33,16 +39,17 @@ rules out Google Cloud Functions
 
 * A requirements.txt file are required for BOTH app deploy AND the pipeline! This creates dependencies on for
  example gunicorn within the pipeline! 
- 
+
 Example errors in GCP Dataflow:
 ```
 ModuleNotFoundError: No module named 'main'
 ModuleNotFoundError: No module named 'gunicorn'
+in general... ModuleNotFoundError: No module named 'xxxxx'
 ```
- 
+
 ## How to run
  
-There are 4 runtime scenarios of interest:
+There are 3 runtime scenarios of interest:
  
 1. Run via a local web server using DirectRunner
  
